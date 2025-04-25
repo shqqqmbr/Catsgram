@@ -2,6 +2,8 @@ package ru.yandex.practicum.catsgram.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import ru.yandex.practicum.catsgram.exception.ConditionsNotMetException;
 import ru.yandex.practicum.catsgram.exception.NotFoundException;
 import ru.yandex.practicum.catsgram.model.Post;
@@ -46,6 +48,14 @@ public class PostService {
             return oldPost;
         }
         throw new NotFoundException("Пост с id = " + newPost.getId() + " не найден");
+    }
+
+    public Post getById(long postId) {
+        if (posts.get(postId) != null) {
+            return posts.get(postId);
+        } else {
+            throw new NullPointerException("Пост с Id " + postId + " не найден");
+        }
     }
 
     private long getNextId() {

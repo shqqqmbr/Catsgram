@@ -2,10 +2,7 @@ package ru.yandex.practicum.catsgram.service;
 
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.catsgram.exception.ConditionsNotMetException;
 import ru.yandex.practicum.catsgram.exception.DuplicatedDataException;
 import ru.yandex.practicum.catsgram.model.User;
@@ -26,7 +23,6 @@ public class UserService {
         return users.values();
     }
 
-    @PostMapping
     public User create(@RequestBody User user) {
         if (user.getEmail().isBlank()) {
             throw new ConditionsNotMetException("Имейл должен быть указан");
@@ -42,7 +38,6 @@ public class UserService {
         return user;
     }
 
-    @PutMapping
     public User update(@RequestBody User newUser) {
         if (newUser.getId() == 0) {
             throw new ConditionsNotMetException("Id должен быть указан");
@@ -61,6 +56,14 @@ public class UserService {
             existingUser.setPassword(newUser.getPassword());
         }
         return existingUser;
+    }
+
+    public User getById(long userId) {
+        if (users.get(userId) != null) {
+            return users.get(userId);
+        } else {
+            throw new NullPointerException("Пользователь с id " + userId + " не найден");
+        }
     }
 
     private long getNextId() {
